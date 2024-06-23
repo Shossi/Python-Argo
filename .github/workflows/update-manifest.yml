@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,10 +45,10 @@ jobs:
           sed -i 's|tag:.*|tag: '"${{ env.SHORT_SHA }}"'|' ./helm-chart/values.yaml
 
       - name: Commit and push changes to values.yaml
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update image tag to ${{ env.SHORT_SHA }}"
-          branch: ${{ github.ref }}
+          branch: main
           file_pattern: ./helm-chart/values.yaml
-          repository: ${{ github.repository }}
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          commit_user_name: github-actions
+          commit_user_email: github-actions@github.com
