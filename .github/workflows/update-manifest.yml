@@ -28,10 +28,13 @@ jobs:
         working-directory: ./src
         run: |
           docker-compose build
+          docker-compose images
           export IMAGE_TAG=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep weather_app | awk -F: '{print $2}')
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-      
+
+      - name: Debug
+        run: docker images
 
       - name: Push Docker Image
         run: |
