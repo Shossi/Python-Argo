@@ -1,17 +1,10 @@
-name: Main Pipeline
+name: UpdateManifest Pipeline
 
 on:
   workflow_dispatch:
-  pull_request:
-    branches:
-      - master
-    types:
-      - closed
-  repository_dispatch:
-    types: [ deploy ]
   push:
     branches:
-      - master
+      - main
     paths-ignore:
       - 'helm-chart/**'
 
@@ -35,16 +28,14 @@ jobs:
         working-directory: ./src
         run: |
           docker-compose build
-          IMAGE_TAG=$(docker-compose images | grep weather_app | awk '{print $3}')
+          export IMAGE_TAG=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep weather_app | awk -F: '{print $2}')
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-
-      - name: Debug IMAGE_TAG
-        run: echo ${{ env.IMAGE_TAG }}
+      
 
       - name: Push Docker Image
         run: |
-          docker tag ${{ env.IMAGE_TAG }} yossizxc/weather_app:my-app-${{ github.sha }}
+          docker tag $IMAGE_TAG yossizxc/weather_app:my-app-${{ github.sha }}
           docker push yossizxc/weather_app:my-app-${{ github.sha }}
 
       - name: Update Helm values.yaml
