@@ -1,0 +1,7 @@
+*Dockerfile
+*.yaml
+/nginx
+docker-compose.yml
+*.conf
+*Jenkinsfile*
+cities

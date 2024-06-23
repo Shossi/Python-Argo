@@ -1,0 +1,13 @@
+# docker-compose --build
+version: '3'
+services:
+  gunicorn:
+    build: .
+    expose:
+      - 5000
+    restart: always
+    environment:
+      BG_COLOR: "#0000f0"
+    deploy:
+      mode: replicated
+      replicas: 2

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-weather-app
+spec:
+  selector:
+    app: {{ .Release.Name }}-weather-app
+  ports:
+      - protocol: TCP
+        port: {{ .Values.weatherApp.service.port }}
+        targetPort: {{ .Values.weatherApp.service.targetPort }}
+        nodePort: {{ .Values.weatherApp.service.nodePort }}
+  type: {{ .Values.weatherApp.service.type }}

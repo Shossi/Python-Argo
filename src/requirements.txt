@@ -1,0 +1,7 @@
+boto3==1.34.85
+Flask==3.0.3
+googletrans==4.0.0-rc1
+pytest==8.1.1
+Requests==2.31.0
+selenium==4.19.0
+gunicorn
