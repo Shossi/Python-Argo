@@ -28,7 +28,7 @@ jobs:
         working-directory: ./src
         run: |
           docker-compose build
-          export IMAGE_TAG=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep src_gunicorn | awk -F: '{print $2}')
+          IMAGE_TAG=$(docker images src_gunicorn --format "{{.Tag}}")
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
