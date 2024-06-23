@@ -28,24 +28,25 @@ jobs:
         working-directory: ./src
         run: |
           docker-compose build
-          export IMAGE_TAG="my-app-${GITHUB_SHA}"
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | head -c 6)
+          export IMAGE_TAG="my-app-${SHORT_SHA}"
           docker tag src_gunicorn:latest yossizxc/weather_app:$IMAGE_TAG
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
 
       - name: Push Docker Image
         run: |
-          docker tag $IMAGE_TAG yossizxc/weather_app:my-app-${{ github.sha }}
-          docker push yossizxc/weather_app:my-app-${{ github.sha }}
+          docker push yossizxc/weather_app:${{ env.IMAGE_TAG }}
 
       - name: Update Helm values.yaml
         run: |
-          sed -i 's/tag:.*/tag: my-app-${{ github.sha }}/' ./helm-chart/values.yaml
+          SHORT_SHA=$(echo "${GITHUB_SHA}" | head -c 6)
+          sed -i 's/tag:.*/tag: my-app-${SHORT_SHA}/' ./helm-chart/values.yaml
 
       - name: Commit and push changes to values.yaml
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@github.com'
           git add ./helm-chart/values.yaml
-          git commit -m "Update image tag to my-app-${{ github.sha }}"
+          git commit -m "Update image tag to my-app-${SHORT_SHA}"
           git push
