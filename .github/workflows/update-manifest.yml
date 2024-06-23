@@ -43,11 +43,10 @@ jobs:
           sed -i 's|tag:.*|tag: '"${{ env.SHORT_SHA }}"'|' ./helm-chart/values.yaml
 
       - name: Commit and push changes to values.yaml
-        env:
-          REPO_ACCESS_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-        run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
-          git add ./helm-chart/values.yaml
-          git commit -m "Update image tag to my-app-${{ env.IMAGE_TAG }}"
-          git push https://x-access-token:${REPO_ACCESS_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update image tag to ${{ env.SHORT_SHA }}"
+          branch: ${{ github.ref }}
+          file_pattern: ./helm-chart/values.yaml
+          repository: ${{ github.repository }}
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
