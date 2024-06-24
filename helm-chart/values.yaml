@@ -3,7 +3,7 @@ registrySecretName: my-docker-secret
 replicaCount: 2
 weatherApp:
   image:
-    repository: yossizxc/weather_app
+    repository: yossizxc/weather
     pullPolicy: IfNotPresent
     tag: 7b9641
   service:
