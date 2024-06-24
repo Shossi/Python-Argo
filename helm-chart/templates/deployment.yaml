@@ -24,10 +24,3 @@ spec:
                 configMapKeyRef:
                   name: configmap-blue
                   key: BG_COLOR
-          volumeMounts:
-            - mountPath: "/home/bonji/app/data/history"
-              name: weather-app-storage
-      volumes:
-        - name: weather-app-storage
-          persistentVolumeClaim:
-            claimName: pvc-weather-app
