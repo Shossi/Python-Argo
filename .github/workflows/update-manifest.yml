@@ -31,7 +31,7 @@ jobs:
         run: |
           docker-compose build
           SHORT_SHA=$(echo "${GITHUB_SHA}" | head -c 6)
-          IMAGE="yossizxc/weather_app:${SHORT_SHA}"
+          IMAGE="yossizxc/weather:${SHORT_SHA}"
           docker tag src_gunicorn:latest $IMAGE
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
