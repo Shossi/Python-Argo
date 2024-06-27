@@ -56,3 +56,14 @@ jobs:
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        with:
+          tag_name: v${{ steps.get_bump.outputs.new_version }}
+          release_name: Weather v${{ steps.get_bump.outputs.new_version }}
+          draft: false
+          prerelease: false
