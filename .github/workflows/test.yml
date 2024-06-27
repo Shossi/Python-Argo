@@ -43,16 +43,20 @@ jobs:
             echo "bump=minor" >> $GITHUB_ENV
           else
             echo "bump=patch" >> $GITHUB_ENV
-          fi
-        env:
-          GITHUB_ENV: ${{ github.env_path }}
 
       - name: Bump version
-        run: |
-          bump2version ${{ env.bump }}
-          echo "new_version=$(bump2version --dry-run --list | grep new_version | sed -r 's/^.*new_version=//')" >> $GITHUB_ENV
+        run: bump2version ${{ env.bump }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Read new version
+        id: read_version
+        run: |
+          new_version=$(grep -Po '(?<=__version__ = ")([0-9]+\.[0-9]+\.[0-9]+)(?=")' version.py)
+          echo "new_version=$new_version" >> $GITHUB_ENV
+
+      - name: Debug new version
+        run: echo ${{ env.new_version }}
 
       - name: Push changes and tags
         run: |
@@ -60,9 +64,6 @@ jobs:
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-
-      - name: echo new_verison
-        run: echo ${{ env.bump }}
 
       - name: Create GitHub Release
         id: create_release
