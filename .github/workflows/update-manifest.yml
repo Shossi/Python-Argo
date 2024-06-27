@@ -2,11 +2,11 @@ name: UpdateManifest Pipeline
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'helm-chart/**'
+#  push:
+#    branches:
+#      - main
+#    paths-ignore:
+#      - 'helm-chart/**'
 
 jobs:
   build:
