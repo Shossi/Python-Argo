@@ -27,6 +27,7 @@ jobs:
             echo "bump=minor" >> $GITHUB_ENV
           else
             echo "bump=patch" >> $GITHUB_ENV
+          fi
 
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.40.0
