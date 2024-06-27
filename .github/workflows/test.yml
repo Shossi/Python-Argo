@@ -18,6 +18,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Fetch all tags
+        run: git fetch --tags
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install bump2version
+        run: pip install bump2version
+
       - name: Determine version bump
         id: get_bump
         run: |
@@ -29,14 +40,14 @@ jobs:
             echo "bump=patch" >> $GITHUB_ENV
           fi
 
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.40.0
-        with:
-          github_token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          default_bump: ${{ env.bump }}
-          tag_prefix: "v"
+      - name: Bump version
+        run: bump2version ${{ env.bump }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
-      - name: Push changes
-        run: git push origin --tags
+      - name: Push changes and tags
+        run: |
+          git push origin --tags
+          git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
