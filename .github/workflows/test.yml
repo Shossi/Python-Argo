@@ -43,6 +43,7 @@ jobs:
             echo "bump=minor" >> $GITHUB_ENV
           else
             echo "bump=patch" >> $GITHUB_ENV
+          fi
         shell: bash
 
       - name: Bump version
