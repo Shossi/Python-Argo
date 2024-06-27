@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,3 +30,18 @@ jobs:
           namespace: weather
           enable_prerelease_mode: true
           debug: true
+
+      - name: Output version
+        run: echo "Determined version is ${{ steps.version.outputs.version }}"
+
+      - name: Create new tag
+        if: steps.version.outputs.new_tag == 'true'
+        run: git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Push new tag
+        if: steps.version.outputs.new_tag == 'true'
+        run: git push origin ${{ steps.version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
