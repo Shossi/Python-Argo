@@ -61,6 +61,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
+      - name: echo new_verison
+        run: echo ${{ env.bump }}
+
       - name: Create GitHub Release
         id: create_release
         uses: actions/create-release@v1
