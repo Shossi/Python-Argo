@@ -43,7 +43,7 @@ jobs:
             echo "bump=minor" >> $GITHUB_ENV
           else
             echo "bump=patch" >> $GITHUB_ENV
-          fi
+        shell: bash
 
       - name: Bump version
         id: bump_version
@@ -52,6 +52,7 @@ jobs:
           echo "new_version=$new_version" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        shell: bash
 
       - name: Push changes and tags
         run: |
@@ -59,6 +60,7 @@ jobs:
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+        shell: bash
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
