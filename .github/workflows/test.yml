@@ -48,8 +48,9 @@ jobs:
       - name: Bump version
         id: bump_version
         run: |
-          bump2version ${{ env.bump }}
-          echo "new_version=$(bump2version ${{ env.bump }} --dry-run --list | grep new_version | sed -r s,"^.*=",,)" >> $GITHUB_ENV
+          bump2version ${{ env.bump }} --allow-dirty
+          new_version=$(bump2version ${{ env.bump }} --dry-run --list | grep new_version | sed -r s,"^.*=",,)
+          echo "new_version=$new_version" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
