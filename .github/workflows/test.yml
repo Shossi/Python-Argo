@@ -1,4 +1,4 @@
-name: Bump version and push tag
+name: Tag version
 
 on:
   push:
@@ -11,16 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Set up Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Determine version bump
         id: get_bump
@@ -31,17 +27,15 @@ jobs:
             echo "bump=minor" >> $GITHUB_ENV
           else
             echo "bump=patch" >> $GITHUB_ENV
-          fi
 
       - name: Bump version and push tag
-        uses: mathieudutour/github-tag-action@v6.0
+        uses: anothrNick/github-tag-action@1.40.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: "v"
+          github_token: ${{ secrets.REPO_ACCESS_TOKEN }}
           default_bump: ${{ env.bump }}
-          commit_sha: ${{ github.sha }}
+          tag_prefix: "v"
 
       - name: Push changes
         run: git push origin --tags
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
