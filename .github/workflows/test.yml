@@ -46,7 +46,10 @@ jobs:
           fi
 
       - name: Bump version
-        run: bump2version ${{ env.bump }}
+        id: bump_version
+        run: |
+          bump2version ${{ env.bump }}
+          echo "new_version=$(bump2version ${{ env.bump }} --dry-run --list | grep new_version | sed -r s,"^.*=",,)" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
@@ -58,12 +61,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
 
       - name: Create GitHub Release
-        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         with:
-          tag_name: v${{ steps.get_bump.outputs.new_version }}
-          release_name: Weather v${{ steps.get_bump.outputs.new_version }}
+          tag_name: v${{ env.new_version }}
+          release_name: Weather v${{ env.new_version }}
           draft: false
           prerelease: false
