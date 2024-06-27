@@ -2,9 +2,9 @@ name: sematic
 
 on:
   workflow_dispatch:
-#  push:
-#    branches:
-#      - main
+  push:
+    branches:
+      - main
 #    paths-ignore:
 #      - 'helm-chart/**'
 
