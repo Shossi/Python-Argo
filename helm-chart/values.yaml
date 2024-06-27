@@ -5,7 +5,7 @@ weatherApp:
   image:
     repository: yossizxc/weather
     pullPolicy: IfNotPresent
-    tag: f81579
+    tag: 912cc1
   service:
     type: NodePort
     port: 80
