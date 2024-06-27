@@ -29,6 +29,3 @@ jobs:
           namespace: weather
           enable_prerelease_mode: true
           debug: true
-
-      - name: Output version
-        run: echo "Version: ${{ steps.version.outputs.new_version }}"
