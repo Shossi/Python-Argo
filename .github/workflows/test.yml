@@ -48,7 +48,7 @@ jobs:
       - name: Bump version
         id: bump_version
         run: |
-          bump2version ${{ env.bump }} --allow-dirty
+          bump2version ${{ env.bump }}
           new_version=$(bump2version ${{ env.bump }} --dry-run --list | grep new_version | sed -r s,"^.*=",,)
           echo "new_version=$new_version" >> $GITHUB_ENV
         env:
