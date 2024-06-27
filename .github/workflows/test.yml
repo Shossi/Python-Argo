@@ -30,14 +30,14 @@ jobs:
 
       - name: Output version
         run: |
-          echo "Version: ${{ steps.version.outputs.new_version }}"
+          echo "Version: ${{ steps.version.outputs.version }}"
 
       - name: Create tag
         if: success()
         run: |
           git config --global user.email "you@example.com"
           git config --global user.name "Your Name"
-          git tag -a "v${{ steps.version.outputs.new_version }}" -m "Version ${{ steps.version.outputs.new_version }}"
-          git push origin "v${{ steps.version.outputs.new_version }}"
+          git tag -a "${{ steps.version.outputs.version }}" -m "Version ${{ steps.version.outputs.version }}"
+          git push origin "${{ steps.version.outputs.version }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
