@@ -28,7 +28,7 @@ BG_COLOR = os.getenv('BG_COLOR', '#ffffff')  # default to white if not set
 
 
 def save_search_query(location, data):
-    print("Heaallaaassaaaaaaaaao, worald1!")
+    print("Heaallaaassaaaaaaaaaao, worald1!")
     if not os.path.exists(SAVE_DIR):
         os.makedirs(SAVE_DIR)
     filename = os.path.join(SAVE_DIR, f"{location}.json")
