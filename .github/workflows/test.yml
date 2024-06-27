@@ -36,3 +36,5 @@ jobs:
           echo "Minor: ${{ steps.version.outputs.minor }}"
           echo "Patch: ${{ steps.version.outputs.patch }}"
           echo "Version: ${{ steps.version.outputs.version }}"
+          echo "Version Type: ${{ steps.version.outputs.version_type }}"
+          echo "Previous Version: ${{ steps.version.outputs.previous_version }}"
