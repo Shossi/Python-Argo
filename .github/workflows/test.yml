@@ -26,22 +26,29 @@ jobs:
           tag_prefix: "v"
           major_pattern: "(MAJOR)"
           minor_pattern: "(MINOR)"
-          version_format: "${major}.${minor}.${patch}-prerelease${increment}"
+          version_format: "${major}.${minor}.${patch}"
           namespace: weather
-          enable_prerelease_mode: true
-          debug: true
+          enable_prerelease_mode: false  # Temporarily disable prerelease to simplify
 
-      - name: Output version
-        run: echo "Determined version is ${{ steps.version.outputs.version }}"
+      - name: Output version info
+        run: |
+          echo "New Tag: ${{ steps.version.outputs.new_tag }}"
+          echo "New Version: ${{ steps.version.outputs.version }}"
+          echo "Commit SHA: ${{ steps.version.outputs.commit_sha }}"
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Create new tag
         if: steps.version.outputs.new_tag == 'true'
         run: git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push new tag
         if: steps.version.outputs.new_tag == 'true'
         run: git push origin ${{ steps.version.outputs.version }}
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
