@@ -1,55 +1,48 @@
-name: semantic
+name: Bump version and push tag
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
       - feature/*
 
 jobs:
-  build:
+  tag:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Ensure all tags and history are fetched
+          fetch-depth: 0
 
-      - name: Determine semantic version
-        id: version
-        uses: PaulHatch/semantic-version@v5.4.0
-        with:
-          tag_prefix: "v"
-          major_pattern: "(MAJOR)"
-          minor_pattern: "(MINOR)"
-          version_format: "${major}.${minor}.${patch}"
-          namespace: weather
-          enable_prerelease_mode: false
-          debug: true
-
-      - name: Output version info
-        run: |
-          echo "New Tag: ${{ steps.version.outputs.new_tag }}"
-          echo "New Version: ${{ steps.version.outputs.version }}"
-          echo "Commit SHA: ${{ steps.version.outputs.commit_sha }}"
-
-      - name: Configure Git
+      - name: Set up Git
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Create new tag
-        if: steps.version.outputs.new_tag == 'true'
-        run: git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+      - name: Determine version bump
+        id: get_bump
+        run: |
+          if git log -1 --pretty=%B | grep -q '\[MAJOR\]'; then
+            echo "::set-output name=bump::major"
+          elif git log -1 --pretty=%B | grep -q '\[MINOR\]'; then
+            echo "::set-output name=bump::minor"
+          else
+            echo "::set-output name=bump::patch"
+          fi
 
-      - name: Push new tag
-        if: steps.version.outputs.new_tag == 'true'
-        run: git push origin ${{ steps.version.outputs.version }}
+      - name: Bump version and push tag
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: "v"
+          default_bump: ${{ steps.get_bump.outputs.bump }}
+          bump_message: "ci: bump version to {{version}}"
+
+      - name: Push changes
+        run: |
+          git push origin --tags
         env:
-          GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
