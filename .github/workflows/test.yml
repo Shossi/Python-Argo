@@ -29,6 +29,11 @@ jobs:
       - name: Install bump2version
         run: pip install bump2version
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "github-actions"
+
       - name: Determine version bump
         id: get_bump
         run: |
