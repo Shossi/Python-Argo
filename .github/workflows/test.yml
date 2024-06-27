@@ -44,16 +44,11 @@ jobs:
           else
             echo "bump=patch" >> $GITHUB_ENV
           fi
-        shell: bash
 
       - name: Bump version
-        id: bump_version
-        run: |
-          new_version=$(bump2version ${{ env.bump }} --list | grep new_version | sed -r 's/^.*=//')
-          echo "new_version=$new_version" >> $GITHUB_ENV
+        run: bump2version ${{ env.bump }}
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-        shell: bash
 
       - name: Push changes and tags
         run: |
@@ -61,14 +56,14 @@ jobs:
           git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
-        shell: bash
 
       - name: Create GitHub Release
+        id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.REPO_ACCESS_TOKEN }}
         with:
-          tag_name: v${{ env.new_version }}
-          release_name: Weather v${{ env.new_version }}
+          tag_name: v${{ steps.get_bump.outputs.new_version }}
+          release_name: Weather v${{ steps.get_bump.outputs.new_version }}
           draft: false
           prerelease: false
