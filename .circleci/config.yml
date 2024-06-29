@@ -30,6 +30,16 @@ jobs:
             docker ps 
             bash ./tests/unittest.sh
       - run:
+          name: Notify Discord of Success
+          when: on_success
+          command: |
+            curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests succeeded for project kojoey/weather"}' $DISCORD_WEBHOOK_URL
+      - run:
+          name: Notify Discord of Failure
+          when: on_fail
+          command: |
+            curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests failed for project kojoey/weather"}' $DISCORD_WEBHOOK_URL
+      - run:
           name: Docker Compose Down
           command: |
             cd src
@@ -56,16 +66,6 @@ jobs:
             IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:latest
             docker tag src_gunicorn:latest $IMAGE_NAME
             docker push $IMAGE_NAME
-      - run:
-          name: Notify Discord of Success
-          when: on_success
-          command: |
-            curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests succeeded for project kojoey/weather"}' $DISCORD_WEBHOOK_URL
-      - run:
-          name: Notify Discord of Failure
-          when: on_fail
-          command: |
-            curl -H "Content-Type: application/json" -X POST -d '{"content": "Build and tests failed for project kojoey/weather"}' $DISCORD_WEBHOOK_URL
 
 workflows:
   version: 2
@@ -74,4 +74,4 @@ workflows:
       - build_and_test
       # - publish:
       #     requires:
-      #       - notify
+      #       - built_and_test
