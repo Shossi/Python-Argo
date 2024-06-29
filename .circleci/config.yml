@@ -58,7 +58,7 @@ jobs:
           command: |
             cd src
             # IMAGE_NAME=$GITLAB_REGISTRY/$GITLAB_PROJECT:latest
-            IMAGE_NAME=$GITLAB_REGSITRY/kojoey/weather:latest
+            IMAGE_NAME=registry.gitlab.com/kojoey/weather:latest
             echo $IMAGE_NAME
             docker tag src_gunicorn:latest $IMAGE_NAME
             docker images
