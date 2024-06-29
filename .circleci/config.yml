@@ -27,6 +27,7 @@ jobs:
           name: Run Tests
           command: |
             cd src
+            docker ps 
             bash ./tests/unittest.sh
       - run:
           name: Docker Compose Down
