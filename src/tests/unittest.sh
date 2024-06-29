@@ -5,7 +5,7 @@ else
   IP=$(hostname -i)
 fi
 echo "$IP"
-curl http://"$IP":80 # -o /dev/null -s
+curl http://"$IP":5000 # -o /dev/null -s
 RESULT=$?
 if [[ RESULT -eq 0 ]]; then
     echo "Command succeeded"
