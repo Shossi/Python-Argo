@@ -56,11 +56,6 @@ jobs:
             IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:latest
             docker tag src_gunicorn:latest $IMAGE_NAME
             docker push $IMAGE_NAME
-
-  notify:
-    docker:
-      - image: circleci/python:3.8
-    steps:
       - run:
           name: Notify Discord of Success
           when: on_success
