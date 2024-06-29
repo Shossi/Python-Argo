@@ -72,9 +72,6 @@ workflows:
   weather:
     jobs:
       - build_and_test
-      - notify:
-          requires:
-            - build_and_test
-      - publish:
-          requires:
-            - notify
+      # - publish:
+      #     requires:
+      #       - notify
