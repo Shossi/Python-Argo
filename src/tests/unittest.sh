@@ -2,7 +2,7 @@
 if [[ "$1" ]];then
   IP="$1"
 else
-  IP=$(hostname -i | awk '{print $1}')
+  IP=$(hostname -i | awk '{print $2}')
 fi
 echo "$IP"
 curl http://"$IP":5000 # -o /dev/null -s
