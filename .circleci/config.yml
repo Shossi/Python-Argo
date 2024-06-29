@@ -34,9 +34,34 @@ jobs:
           command: |
             cd src
             docker-compose down
+  publish:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker Image
+          command: |
+            cd src
+            docker-compose build
+      - run:
+          name: Login to GitLab Container Registry
+          command: |
+            echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin $GITLAB_REGISTRY
+      - run:
+          name: Tag and Push Docker Image
+          command: |
+            cd src
+            IMAGE_NAME=$GITLAB_REGISTRY/$GITLAB_PROJECT:latest
+            docker tag src_gunicorn:latest $IMAGE_NAME
+            docker push $IMAGE_NAME    
 
 workflows:
   version: 2
-  build_and_test_workflow:
+  build_and_test_push_workflow:
     jobs:
       - build_and_test
+      - publish:
+          requires:
+            - build_and_test
