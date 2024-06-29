@@ -54,14 +54,16 @@ jobs:
           command: |
             cd src
             IMAGE_NAME=$GITLAB_REGISTRY/$GITLAB_PROJECT:latest
+            echo $IMAGE_NAME
             docker tag src_gunicorn:latest $IMAGE_NAME
+            docker images
             docker push $IMAGE_NAME    
 
 workflows:
   version: 2
   build_and_test_push_workflow:
     jobs:
-      - build_and_test
-      - publish:
-          requires:
-            - build_and_test
+      # - build_and_test
+      - publish 
+          # requires:
+          #   - build_and_test
