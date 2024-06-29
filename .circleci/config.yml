@@ -82,4 +82,4 @@ workflows:
             - build_and_test
       - publish:
           requires:
-            - build_and_test
+            - notify
