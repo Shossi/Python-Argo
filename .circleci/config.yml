@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Login to GitLab Container Registry
           command: |
-            echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin $GITLAB_REGISTRY
+            echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin registry.gitlab.com
       - run:
           name: Tag and Push Docker Image
           command: |
