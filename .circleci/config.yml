@@ -48,10 +48,13 @@ jobs:
       - run:
           name: Login to GitLab Container Registry
           command: |
-            echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin registry.gitlab.com
-            docker tag src_gunicorn:latest registry.gitlab.com/kojoey/weather:latest
-            docker images
-            docker push registry.gitlab.com/kojoey/weather:latest    
+            echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin $GITLAB_REGISTRY
+      - run:
+          name: Tag and Push Docker Image
+          command: |
+            IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:latest
+            docker tag src_gunicorn:latest $IMAGE_NAME
+            docker push $IMAGE_NAME
 
 workflows:
   version: 2
