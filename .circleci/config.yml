@@ -6,8 +6,6 @@ jobs:
       - image: circleci/python:3.8
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 23.0.1
       - run:
           name: Build Docker Image
           command: |
