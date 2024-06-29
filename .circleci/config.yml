@@ -48,7 +48,7 @@ jobs:
       - run:
           name: Login to GitLab Container Registry
           command: |
-            echo $GITLAB_TOKEN
+            echo ${GITLAB_TOKEN}
             echo $GITLAB_USER
             echo $GITLAB_REGISTRY
             echo $GITLAB_PROJECT
