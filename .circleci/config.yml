@@ -4,6 +4,7 @@ jobs:
   build_and_test:
     docker:
       - image: circleci/python:3.8
+    working_directory: ~/src
     steps:
       - checkout
       - setup_remote_docker:
@@ -13,12 +14,10 @@ jobs:
           command: |
             ls
             pwd
-            cd src
             docker-compose build
       - run:
           name: Run Docker Compose
           command: |
-            cd src
             docker-compose down
             docker-compose --compatibility up -d
       - run:
@@ -27,12 +26,10 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            cd src
-            ./tests/unittest.sh
+            bash ./tests/unittest.sh
       - run:
           name: Docker Compose Down
           command: |
-            cd src
             docker-compose down
 
 workflows:
