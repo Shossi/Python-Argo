@@ -89,10 +89,10 @@ jobs:
       - terraform/init:
           path: ./terraform/eks
       - run:
-        name: TerraTest
-        command: |
-          cd terraform/eks/tests
-          go test -v
+          name: TerraTest
+          command: |
+            cd terraform/eks/tests
+            go test -v
       # - terraform/plan:
       #     path: ./terraform/eks
       # - terraform/apply:
