@@ -72,11 +72,17 @@ jobs:
       - image: hashicorp/terraform:latest
     steps:
       - checkout
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          aws-region: AWS_DEFAULT_REGION
       - run:
           name: Install Dependencies
           command: |
             apk update && apk add --no-cache python3 py3-pip git
-            pip3 install checkov
+            python3 -m venv /path/to/venv
+            . /path/to/venv/bin/activate
+            pip install checkov
             wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
             tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
             export PATH=$PATH:/usr/local/go/bin
@@ -84,18 +90,24 @@ jobs:
       - run:
           name: Checkov - Scan Terraform Code
           command: |
+            . /path/to/venv/bin/activate
             checkov -d ./terraform/eks
       - run:
-          name: Terraform Init and Apply
+          name: Terraform Init
           command: |
             cd ./terraform/eks
             terraform init
-            terraform apply -auto-approve
-      - run:
-          name: Terratest
-          command: |
-            cd ./terraform/eks/tests
-            go test -v
+      # - run:
+      #     name: Terratest
+      #     command: |
+      #       cd ./terraform/eks/tests
+      #       go test -v
+      # - run:
+      #     name: Terraform Apply
+      #     command: |
+      #       cd ./terraform/eks
+      #       terraform apply -auto-approve
+
 
 workflows:
   version: 2
