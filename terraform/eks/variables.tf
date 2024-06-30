@@ -25,7 +25,7 @@ variable "private_subnets" {
 variable "azs" {
   type        = list(string)
   description = "A list of availability zones specified as argument to this module"
-  default     = ["eu-west-3a", "eu-west-3b", "eu-west-3c"]
+  default     = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
 }
 variable "enable_nat_gateway" {
   type        = bool
