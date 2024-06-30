@@ -81,7 +81,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            apt-get update && apt-get install -y python3-pip golang
+            apt-get update && apt-get install -y python3-pip golang-go
             pip3 install checkov
       - run:
           name: Checkov - Scan Terraform Code
