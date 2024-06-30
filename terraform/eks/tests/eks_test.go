@@ -1,32 +1,37 @@
 package test
 
 import (
-    "fmt"
-    "testing"
+	"testing"
 
-    "github.com/gruntwork-io/terratest/modules/terraform"
-    "github.com/stretchr/testify/assert"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestTerraformEks(t *testing.T) {
-    t.Parallel()
+func TestTerraformBasicExample(t *testing.T) {
+	t.Parallel()
 
-    terraformOptions := &terraform.Options{
-        TerraformDir: "../",
-        Vars: map[string]interface{}{
-            // Add any variables you want to override here
-        },
-    }
+	terraformOptions := &terraform.Options{
+		TerraformDir: "../../terraform",
+		NoColor:      true,
+	}
 
-    defer terraform.Destroy(t, terraformOptions)
+	// Initialize Terraform (assumed to succeed)
+	terraform.Init(t, terraformOptions)
 
-    // Run `terraform init` and `terraform apply`. Fail the test if there are any errors.
-    terraform.InitAndApply(t, terraformOptions)
+	// Apply Terraform configuration (assumed to succeed)
+	terraform.Apply(t, terraformOptions)
 
-    // Run `terraform output` to get the value of an output variable
-    clusterName := terraform.Output(t, terraformOptions, "cluster_name")
+	// Verify resources created by Terraform
+	verifyTerraformResources(t, terraformOptions)
 
-    // Verify that the cluster name is as expected
-    assert.NotEmpty(t, clusterName)
-    fmt.Printf("Cluster name is: %s\n", clusterName)
+	// Destroy Terraform resources (assumed to succeed)
+	terraform.Destroy(t, terraformOptions)
+}
+
+func verifyTerraformResources(t *testing.T, terraformOptions *terraform.Options) {
+	// Verify specific resources created by Terraform (assumed to exist)
+	clusterName := terraform.Output(t, terraformOptions, "cluster_name")
+	assert.NotEmpty(t, clusterName, "cluster name shouldn't be empty")
+
+	// Add more assertions as per your specific resource outputs
 }
