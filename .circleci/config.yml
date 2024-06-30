@@ -4,6 +4,7 @@ orbs:
   aws-cli: circleci/aws-cli@4.0
   terraform: circleci/terraform@3.2.0
   go: circleci/go@1.11.0
+  helm: circleci/helm@2.0.0
   
 jobs:
   build_and_test:
@@ -81,7 +82,7 @@ jobs:
       - terraform/install
       - go/install:
           version: "1.18"
-          
+      - helm/install-helm
       - run:
           name: Install Dependencies
           command: |
@@ -103,15 +104,45 @@ jobs:
             go get github.com/gruntwork-io/terratest/modules/terraform
             go get github.com/stretchr/testify/assert
             
+#      - run:
+#          name: TerraTest
+#          command: |
+#            cd terraform/eks/tests
+#            go test -v -timeout 40m
+      - terraform/apply:
+           path: ./terraform/eks
       - run:
-          name: TerraTest
+          name: connect to cluster
           command: |
-            cd terraform/eks/tests
-            go test -v -timeout 40m
-      # - terraform/plan:
-      #     path: ./terraform/eks
-      # - terraform/apply:
-      #     path: ./terraform/eks
+            aws eks update-kubeconfig --name eks-yossi-project
+      - run:
+          name: Deploy ArgoCD with Helm
+          command: |
+            helm upgrade --install argocd ./argo-cd --namespace argocd --create-namespace
+      - run:
+          name: Wait for ArgoCD to be Ready
+          command: |
+            kubectl wait --for=condition=available --timeout=600s deployment/argocd-server -n argocd
+      - run:
+          name: Extract Initial Admin Password
+          command: |
+            ARGOCD_ADMIN_PASSWORD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode)
+            echo $ARGOCD_ADMIN_PASSWORD > argocd_admin_password.txt
+      - run:
+          name: Login to ArgoCD
+          command: |
+            ARGOCD_SERVER=$(kubectl -n argocd get svc argocd-server -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+            argocd login $ARGOCD_SERVER --username admin --password $(cat argocd_admin_password.txt) --insecure
+      - run:
+          name: Create ArgoCD Application
+          command: |
+            argocd app create my-app \
+            --repo https://github.com/Shossi/Python-Argo \
+            --path ./path-to-manifests \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace default \
+            --sync-policy automated
+
 
 workflows:
   version: 2
