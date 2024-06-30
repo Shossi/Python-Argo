@@ -11,7 +11,7 @@ func TestTerraformBasicExample(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := &terraform.Options{
-		TerraformDir: "../../terraform",
+		TerraformDir: "../terraform",
 		NoColor:      true,
 	}
 
