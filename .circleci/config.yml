@@ -72,17 +72,20 @@ jobs:
             
   terraform:
     docker:
-      - image: hashicorp/terraform:latest
+      - image: circleci/python:3.8
     steps:
       - checkout
       - aws-cli/setup
-          # aws-access-key-id: AWS_ACCESS_KEY_ID
-          # aws-secret-access-key: AWS_SECRET_ACCESS_KEY
-      #     aws-region: AWS_DEFAULT_REGION
+      - run:
+          name: Install Terraform
+          command: |
+            wget https://releases.hashicorp.com/terraform/1.5.2/terraform_1.5.2_linux_amd64.zip
+            unzip terraform_1.5.2_linux_amd64.zip
+            mv terraform /usr/local/bin/
       - run:
           name: Install Dependencies
           command: |
-            apk update && apk add --no-cache python3 py3-pip git
+            apt-get update && apt-get install -y python3-pip
             python3 -m venv /path/to/venv
             . /path/to/venv/bin/activate
             pip install checkov
