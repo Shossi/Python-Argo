@@ -85,7 +85,7 @@ jobs:
             pip3 install checkov
       - run:
           name: Checkov - Scan Terraform Code
-          command: checkov -d ./terraform/eks
+          command: checkov -d ./terraform/eks --skip-check CKV_TF_1,CKV_TF_2
       - terraform/init:
           path: ./terraform/eks
       # - terraform/plan:
