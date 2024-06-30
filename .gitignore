@@ -13,7 +13,7 @@ crash.*.log
 # password, private keys, and other secrets. These should not be part of version
 # control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
-# Ignore override files as they are usually used to override resources locally and so
+# Ignore override files as they are usually used to override resources locally and sog
 # are not checked in
 override.tf
 override.tf.json
