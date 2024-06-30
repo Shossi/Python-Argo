@@ -81,7 +81,7 @@ variable "cluster_endpoint_public_access" {
 variable "enable_irsa" {
   type        = bool
   description = "Determines whether to create an OpenID Connect Provider for EKS to enable IRSA"
-  default     = "true"
+  default     = "false"
 }
 variable "eks_tags" {
   type    = map(string)

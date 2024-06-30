@@ -12,7 +12,7 @@ module "eks" {
   subnet_ids = module.vpc.private_subnets
 
   enable_irsa = var.enable_irsa
-
+  create_kms_key = false
 
   cluster_addons = {
     coredns = {

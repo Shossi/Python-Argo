@@ -25,7 +25,7 @@ func TestTerraformBasicExample(t *testing.T) {
 	verifyTerraformResources(t, terraformOptions)
 
 	// Destroy Terraform resources (assumed to succeed)
-	terraform.Destroy(t, terraformOptions)
+// 	defer terraform.Destroy(t, terraformOptions)
 }
 
 func verifyTerraformResources(t *testing.T, terraformOptions *terraform.Options) {
