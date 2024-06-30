@@ -81,12 +81,8 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            apt-get update && apt-get install -y python3-pip
+            apt-get update && apt-get install -y python3-pip golang
             pip3 install checkov
-            wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
-            tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
-            export PATH=$PATH:/usr/local/go/bin
-            go get -v github.com/gruntwork-io/terratest/modules/terraform
       - run:
           name: Checkov - Scan Terraform Code
           command: checkov -d ./terraform/eks
@@ -96,6 +92,7 @@ jobs:
       #     path: ./terraform/eks
       # - terraform/apply:
       #     path: ./terraform/eks
+
 
 
 workflows:
