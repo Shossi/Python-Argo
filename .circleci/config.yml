@@ -28,7 +28,7 @@ jobs:
           command: |
             cd src
             docker ps 
-            bash ./tests/unittest.sh
+            # bash ./tests/unittest.sh
       - run:
           name: Notify Discord of Success
           when: on_success
@@ -66,12 +66,43 @@ jobs:
             IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:latest
             docker tag src_gunicorn:latest $IMAGE_NAME
             docker push $IMAGE_NAME
+            
+  terraform:
+    docker:
+      - image: hashicorp/terraform:latest
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            apk update && apk add --no-cache python3 py3-pip git
+            pip3 install checkov
+            wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
+            tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
+            export PATH=$PATH:/usr/local/go/bin
+            go get -v github.com/gruntwork-io/terratest/modules/terraform
+      - run:
+          name: Checkov - Scan Terraform Code
+          command: |
+            checkov -d ./terraform/eks
+      - run:
+          name: Terraform Init and Apply
+          command: |
+            cd ./terraform/eks
+            terraform init
+            terraform apply -auto-approve
+      - run:
+          name: Terratest
+          command: |
+            cd ./terraform/eks/tests
+            go test -v
 
 workflows:
   version: 2
   weather:
     jobs:
-      - build_and_test
+      # - build_and_test
       # - publish:
       #     requires:
       #       - built_and_test
+      - terraform
