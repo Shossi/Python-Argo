@@ -81,16 +81,28 @@ jobs:
       - terraform/install
       - go/install:
           version: "1.18"
+          
       - run:
           name: Install Dependencies
           command: |
             apt-get update && apt-get install -y python3-pip
             pip3 install checkov
+            
       - run:
           name: Checkov - Scan Terraform Code
           command: checkov -d ./terraform/eks --skip-check CKV_TF_1,CKV_TF_2
+          
       - terraform/init:
           path: ./terraform/eks
+          
+      - run:
+          name: Initialize Go Module
+          command: |
+            cd terraform/eks/tests
+            go mod init terraform-eks-tests
+            go get github.com/gruntwork-io/terratest/modules/terraform
+            go get github.com/stretchr/testify/assert
+            
       - run:
           name: TerraTest
           command: |
@@ -100,8 +112,6 @@ jobs:
       #     path: ./terraform/eks
       # - terraform/apply:
       #     path: ./terraform/eks
-
-
 
 workflows:
   version: 2
