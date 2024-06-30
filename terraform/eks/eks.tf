@@ -27,13 +27,13 @@ module "eks" {
   }
 
   eks_managed_node_group_defaults = {
-    disk_size = 30
+    disk_size = 8
   }
 
   eks_managed_node_groups = {
     general = {
-      desired_size = 1
-      min_size     = 1
+      desired_size = 2
+      min_size     = 2
       max_size     = 10
 
       labels = {
@@ -42,31 +42,6 @@ module "eks" {
 
       instance_types = ["t3.micro"]
       capacity_type  = "ON_DEMAND"
-    }
-
-    spot = {
-      desired_size = 1
-      min_size     = 1
-      max_size     = 10
-
-      labels = {
-        role = "dev"
-      }
-
-      #   taints = [{
-      #     key    = "dedicated"
-      #     value  = "spot"
-      #     effect = "NO_SCHEDULE"
-      #   }]
-      taints = {
-        dedicated = {
-          key    = "dedicated"
-          value  = "spot"
-          effect = "NO_SCHEDULE"
-        }
-      }
-      instance_types = ["t3.micro"]
-      capacity_type  = "SPOT"
     }
   }
   # manage_aws_auth_configmap = true
