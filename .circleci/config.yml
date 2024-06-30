@@ -107,7 +107,7 @@ jobs:
           name: TerraTest
           command: |
             cd terraform/eks/tests
-            go test -v
+            go test -v -timeout 40m
       # - terraform/plan:
       #     path: ./terraform/eks
       # - terraform/apply:
