@@ -15,9 +15,9 @@ terraform {
   }
   required_version = ">= 0.13"
   backend "s3" {
-    bucket = "terraform-yossi-state"
+    bucket = "terraform-yossi-state2"
     key    = "my-terraform-project"
-    region = "eu-west-3"
+    region = "eu-west-2"
   }
 }
 
