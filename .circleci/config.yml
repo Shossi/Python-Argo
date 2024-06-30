@@ -3,8 +3,8 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@4.0
   terraform: circleci/terraform@3.2.0
-  go: circleci/go@1.13.0
-
+  go: circleci/go@1.11.0
+  
 jobs:
   build_and_test:
     docker:
