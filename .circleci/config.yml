@@ -88,6 +88,11 @@ jobs:
           command: checkov -d ./terraform/eks --skip-check CKV_TF_1,CKV_TF_2
       - terraform/init:
           path: ./terraform/eks
+      - run:
+        name: TerraTest
+        command: |
+          cd terraform/eks/tests
+          go test -v
       # - terraform/plan:
       #     path: ./terraform/eks
       # - terraform/apply:
