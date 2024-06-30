@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   aws-cli: circleci/aws-cli@4.0
+  terraform: circleci/terraform@3.2.0
 
 jobs:
   build_and_test:
@@ -76,43 +77,25 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup
-      - run:
-          name: Install Terraform
-          command: |
-            wget https://releases.hashicorp.com/terraform/1.5.2/terraform_1.5.2_linux_amd64.zip
-            unzip terraform_1.5.2_linux_amd64.zip
-            mv terraform /usr/local/bin/
+      - terraform/install
       - run:
           name: Install Dependencies
           command: |
             apt-get update && apt-get install -y python3-pip
-            python3 -m venv /path/to/venv
-            . /path/to/venv/bin/activate
-            pip install checkov
+            pip3 install checkov
             wget https://golang.org/dl/go1.16.3.linux-amd64.tar.gz
             tar -C /usr/local -xzf go1.16.3.linux-amd64.tar.gz
             export PATH=$PATH:/usr/local/go/bin
             go get -v github.com/gruntwork-io/terratest/modules/terraform
       - run:
           name: Checkov - Scan Terraform Code
-          command: |
-            . /path/to/venv/bin/activate
-            checkov -d ./terraform/eks
-      - run:
-          name: Terraform Init
-          command: |
-            cd ./terraform/eks
-            terraform init
-      # - run:
-      #     name: Terratest
-      #     command: |
-      #       cd ./terraform/eks/tests
-      #       go test -v
-      # - run:
-      #     name: Terraform Apply
-      #     command: |
-      #       cd ./terraform/eks
-      #       terraform apply -auto-approve
+          command: checkov -d ./terraform/eks
+      - terraform/init:
+          path: ./terraform/eks
+      # - terraform/plan:
+      #     path: ./terraform/eks
+      # - terraform/apply:
+      #     path: ./terraform/eks
 
 
 workflows:
