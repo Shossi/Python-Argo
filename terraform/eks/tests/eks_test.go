@@ -24,7 +24,7 @@ func TestTerraformEks(t *testing.T) {
     terraform.InitAndApply(t, terraformOptions)
 
     // Run `terraform output` to get the value of an output variable
-    clusterName := terraform.Output(t, terraformOptions, "eks-terraform-project")
+    clusterName := terraform.Output(t, terraformOptions, "cluster_name")
 
     // Verify that the cluster name is as expected
     assert.NotEmpty(t, clusterName)
