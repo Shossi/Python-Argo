@@ -34,7 +34,7 @@ variable "enable_nat_gateway" {
 }
 variable "enable_vpn_gateway" {
   type        = bool
-  description = "Should be true if you want to create a new VPN Gateway resource and attach it to the VPC"
+  description = "Should be true if you want to create a new VPN Gateway resource and attach it to the VPCa"
   default     = "false"
 }
 
