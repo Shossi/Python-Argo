@@ -5,6 +5,6 @@ enable_vpn_gateway = true
 
 
 ### Cluster ##
-cluster_name = "eks-terraform-project"
+cluster_name = "eks-yossi-project"
 cluster_endpoint_private_access = true
 cluster_endpoint_public_access  = true

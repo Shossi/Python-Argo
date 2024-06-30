@@ -2,7 +2,7 @@
 variable "region" {
   type        = string
   description = "Name of the region to select"
-  default     = "eu-west-3"
+  default     = "eu-west-2"
 }
 
 ##### VPC Variables defined #######
