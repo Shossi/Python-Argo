@@ -151,7 +151,7 @@ jobs:
               --docker-server=$GITLAB_REGISTRY \
               --docker-username=$GITLAB_USER \
               --docker-password=$GITLAB_TOKEN \
-              --docker-email=$GITLAB_EMAIL
+              --docker-email=$GITLAB_EMAIL || true
       - run:
           name: Install ArgoCD CLI
           command: |
