@@ -123,6 +123,8 @@ jobs:
       - run:
           name: Build Helm Dependencies
           command: |
+            helm repo add dandydeveloper https://dandydeveloper.github.io/charts/
+            helm repo update
             helm dependency build ./argo-cd
       - run:
           name: Deploy ArgoCD with Helm
