@@ -11,6 +11,11 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-weather-app
+      annotations:
+        kube-monkey/enabled: "enabled"
+        kube-monkey/identifier: "my-app"
+        kube-monkey/kill-mode: "random"
+        kube-monkey/kill-value: "100"
     spec:
       imagePullSecrets:
           - name: {{ .Values.registrySecretName }}

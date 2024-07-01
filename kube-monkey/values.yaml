@@ -1,0 +1,12 @@
+config:
+  dryRun: false
+  debugEnabled: true
+  logLevel: info
+  runHour: 8
+  startHour: 10
+  endHour: 16
+  blacklistedNamespaces:
+    - kube-system
+  whitelistedNamespaces:
+    - default
+  timeZone: America/New_York
