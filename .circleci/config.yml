@@ -20,7 +20,10 @@ jobs:
             git log -1 --pretty=format:'%ae'
             AUTHOR=$(git log -1 --pretty=format:'%ae')
             if [ "$AUTHOR" == "circleci@example.com" ]; then
+              echo hello
               circleci-agent step halt
+            else
+              echo no!
             fi
 
   build_and_test:
