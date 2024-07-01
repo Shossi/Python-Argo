@@ -1,4 +1,5 @@
 helm repo add kubemonkey https://asobti.github.io/kube-monkey/charts/repo
+helm repo update
 kubectl create namespace kube-monkey
 helm install kube-monkey kubemonkey/kube-monkey --namespace kube-monkey # without values
 helm install kube-monkey kubemonkey/kube-monkey --namespace kube-monkey -f values.yaml # with values.
