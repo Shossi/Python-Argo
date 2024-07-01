@@ -5,7 +5,7 @@ weatherApp:
   image:
     repository: registry.gitlab.com/kojoey/weather # yossizxc/weather
     pullPolicy: IfNotPresent
-    tag: f784ee1
+    tag: a09283f
   service:
     type: LoadBalancer
     port: 80
