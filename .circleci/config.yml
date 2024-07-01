@@ -148,7 +148,7 @@ jobs:
             echo $ARGOCD_ADMIN_PASSWORD
             ARGOCD_SERVER=$(kubectl -n argocd get svc argocd-server -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
             echo $ARGOCD_SERVER
-            argocd login $ARGOCD_SERVER --username admin --password $(cat argocd_admin_password.txt) --insecure
+            argocd login $ARGOCD_SERVER --username admin --password $ARGOCD_ADMIN_PASSWORD --insecure
       - run:
           name: Create ArgoCD Application
           command: |
