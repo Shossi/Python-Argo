@@ -1,0 +1,29 @@
+helm repo add kubemonkey https://asobti.github.io/kube-monkey/charts/repo
+kubectl create namespace kube-monkey
+helm install kube-monkey kubemonkey/kube-monkey --namespace kube-monkey # without values
+helm install kube-monkey kubemonkey/kube-monkey --namespace kube-monkey -f values.yaml # with values.
+
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-weather-app
+      annotations:
+        kube-monkey/enabled: "enabled"
+        kube-monkey/identifier: "my-app"
+        kube-monkey/kill-mode: "random"
+        kube-monkey/kill-value: "100"
+
+###
+config:
+  dryRun: false
+  debugEnabled: true
+  logLevel: info
+  runHour: 8
+  startHour: 10
+  endHour: 16
+  blacklistedNamespaces:
+    - kube-system
+  whitelistedNamespaces:
+    - default
+  timeZone: America/New_York
+
+Values yaml .
