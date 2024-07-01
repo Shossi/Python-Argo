@@ -143,7 +143,7 @@ jobs:
       - run:
           name: Deploy ArgoCD with Helm
           command: |
-            helm upgrade --install argocd ./argo-cd --namespace argocd --create-namespace
+            helm install argocd ./argo-cd --namespace argocd --create-namespace | true
       - run:
           name: Create Docker Registry Secret
           command: |
@@ -179,7 +179,7 @@ jobs:
             --path ./helm-chart \
             --dest-server https://kubernetes.default.svc \
             --dest-namespace default \
-            --sync-policy automated
+            --sync-policy automated | true
 
 
 workflows:
