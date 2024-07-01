@@ -145,6 +145,14 @@ jobs:
           command: |
             helm upgrade --install argocd ./argo-cd --namespace argocd --create-namespace
       - run:
+          name: Create Docker Registry Secret
+          command: |
+            kubectl create secret docker-registry my-docker-secret \
+              --docker-server=$GITLAB_REGISTRY \
+              --docker-username=$GITLAB_USER \
+              --docker-password=$GITLAB_TOKEN \
+              --docker-email=$GITLAB_EMAIL
+      - run:
           name: Install ArgoCD CLI
           command: |
             curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
@@ -178,8 +186,14 @@ workflows:
   version: 2
   weather:
     jobs:
-      - build_and_test
+      - build_and_test:
+          filters:
+            paths:
+              ignore:
+                - helm-chart/**
       - publish:
           requires:
             - build_and_test
-#      - terraform
+#      - terraform:
+#          requires:
+#            - publish

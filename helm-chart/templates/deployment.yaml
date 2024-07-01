@@ -12,6 +12,8 @@ spec:
       labels:
         app: {{ .Release.Name }}-weather-app
     spec:
+      imagePullSecrets:
+          - name: { { .Values.registrySecretName } }
       containers:
         - name: weather-app
           image: {{ .Values.weatherApp.image.repository }}:{{ .Values.weatherApp.image.tag }}
