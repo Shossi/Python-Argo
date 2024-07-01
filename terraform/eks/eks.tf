@@ -32,15 +32,15 @@ module "eks" {
 
   eks_managed_node_groups = {
     general = {
-      desired_size = 2
-      min_size     = 2
+      desired_size = 8
+      min_size     = 8
       max_size     = 10
 
       labels = {
         role = "general"
       }
 
-      instance_types = ["t3.micro"]
+      instance_types = ["t2.micro"]
       capacity_type  = "ON_DEMAND"
     }
   }
