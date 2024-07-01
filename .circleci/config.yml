@@ -210,6 +210,6 @@ workflows:
       - publish:
           requires:
             - build_and_test
-#      - terraform:
-#          requires:
-#            - publish
+      - terraform:
+          requires:
+            - publish
