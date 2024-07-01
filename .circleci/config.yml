@@ -17,6 +17,7 @@ jobs:
       - run:
           name: check user
           command: |
+            git log -1 --pretty=format:'%ae'
             AUTHOR=$(git log -1 --pretty=format:'%ae')
             if [ "$AUTHOR" == "circleci@example.com" ]; then
               circleci-agent step halt
