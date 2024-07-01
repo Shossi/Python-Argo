@@ -186,11 +186,13 @@ workflows:
   version: 2
   weather:
     jobs:
-      - build_and_test:
-          filters:
-            paths:
-              ignore:
-                - helm-chart/**
+      - path-filter/filter:
+          name: build_and_test
+          mapping: |
+            helm-chart/ build_and_test
+            helm-chart/ publish
+            helm-chart/ terraform
+            /.*/ build_and_test
       - publish:
           requires:
             - build_and_test
