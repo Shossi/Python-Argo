@@ -143,9 +143,9 @@ jobs:
       - run:
           name: Create ArgoCD Application
           command: |
-            argocd app create my-app \
+            argocd app create weather \
             --repo https://github.com/Shossi/Python-Argo \
-            --path ./path-to-manifests \
+            --path ./helm-chart \
             --dest-server https://kubernetes.default.svc \
             --dest-namespace default \
             --sync-policy automated
