@@ -7,10 +7,9 @@ weatherApp:
     pullPolicy: IfNotPresent
     tag: 912cc1
   service:
-    type: NodePort
+    type: LoadBalancer
     port: 80
     targetPort: 5000
-    nodePort: 32300
 
 
 serviceAccount:
