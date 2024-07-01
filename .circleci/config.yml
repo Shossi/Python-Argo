@@ -200,7 +200,10 @@ workflows:
   version: 2
   weather:
     jobs:
-      - build_and_test
+      - start_no_start
+      - build_and_test:
+          requires:
+            - start_no_start
       - publish:
           requires:
             - build_and_test
