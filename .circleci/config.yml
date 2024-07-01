@@ -82,7 +82,7 @@ jobs:
       - terraform/install
       - go/install:
           version: "1.18"
-      - helm/install-helm
+      - helm/install
       - run:
           name: Install Dependencies
           command: |
