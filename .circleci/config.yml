@@ -8,24 +8,6 @@ orbs:
   kubernetes: circleci/kubernetes@1.3.0
 
 jobs:
-
-  start_no_start:
-    docker:
-      - image: circleci/python:3.8
-    steps:
-      - checkout
-      - run:
-          name: check user
-          command: |
-            git log -1 --pretty=format:'%ae'
-            AUTHOR=$(git log -1 --pretty=format:'%ae')
-            if [ "$AUTHOR" == "circleci@example.com" ]; then
-              echo hello
-              circleci-agent step halt
-            else
-              echo no!
-            fi
-
   build_and_test:
     docker:
       - image: circleci/python:3.8
@@ -103,7 +85,7 @@ jobs:
             git config --global user.email "circleci@example.com"
             git config --global user.name "CircleCI"
             git add helm-chart/values.yaml
-            git commit -m "Update image tag to $COMMIT_SHA"
+            git commit -m "[skip ci] Update image tag to $COMMIT_SHA"
             git push origin $CIRCLE_BRANCH
 
   terraform:
@@ -121,7 +103,7 @@ jobs:
           command: |
             apt-get update && apt-get install -y python3-pip
             pip3 install checkov
-            
+
       - run:
           name: Checkov - Scan Terraform Code
           command: checkov -d ./terraform/eks --skip-check CKV_TF_1,CKV_TF_2
@@ -204,10 +186,7 @@ workflows:
   version: 2
   weather:
     jobs:
-      - start_no_start
-      - build_and_test:
-          requires:
-            - start_no_start
+      - build_and_test
       - publish:
           requires:
             - build_and_test
