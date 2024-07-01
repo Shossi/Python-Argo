@@ -1,0 +1,35 @@
+publish:
+  docker:
+    - image: circleci/python:3.8
+  steps:
+    - checkout
+    - setup_remote_docker
+    - run:
+        name: Update Helm Values
+        command: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          sed -i "s/tag: .*/tag: $COMMIT_SHA/" helm-chart/values.yaml
+    - run:
+        name: Build Docker Image
+        command: |
+          cd src
+          docker-compose build
+    - run:
+        name: Login to GitLab Container Registry
+        command: |
+          echo $GITLAB_TOKEN | docker login -u $GITLAB_USER --password-stdin $GITLAB_REGISTRY
+    - run:
+        name: Tag and Push Docker Image
+        command: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:${COMMIT_SHA}
+          docker tag src_gunicorn:latest $IMAGE_NAME
+          docker push $IMAGE_NAME
+    - run:
+        name: Commit and Push Changes
+        command: |
+          git config --global user.email "circleci@example.com"
+          git config --global user.name "CircleCI"
+          git add helm-chart/values.yaml
+          git commit -m "Update image tag to $COMMIT_SHA"
+          git push origin $CIRCLE_BRANCH

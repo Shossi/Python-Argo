@@ -73,7 +73,7 @@ jobs:
             IMAGE_NAME=${GITLAB_REGISTRY}/${GITLAB_PROJECT}:latest
             docker tag src_gunicorn:latest $IMAGE_NAME
             docker push $IMAGE_NAME
-            
+
   terraform:
     docker:
       - image: circleci/python:3.8
@@ -164,8 +164,8 @@ workflows:
   version: 2
   weather:
     jobs:
-      # - build_and_test
-      # - publish:
-      #     requires:
-      #       - built_and_test
-      - terraform
+       - build_and_test
+       - publish:
+           requires:
+             - built_and_test
+#      - terraform
